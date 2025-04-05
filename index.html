@@ -1,1 +1,47 @@
-<!DOCTYPE html><html><head><title>RevUp</title></head><body><div id='root'></div></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RevUp - AI Revenue Management</title>
+  <style>
+    body { font-family: sans-serif; background: #111; color: #fff; padding: 2em; }
+    h1 { color: gold; }
+    section { margin-bottom: 2em; }
+    .box { background: #222; padding: 1em; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h1>RevUp <span style="font-size: 0.6em;">AI Hotel Revenue Management Dashboard</span></h1>
+
+  <section>
+    <h2>Forecast Overview</h2>
+    <div class="box" id="forecastBox">Loading...</div>
+  </section>
+
+  <section>
+    <h2>Pricing Recommendations</h2>
+    <div class="box" id="pricingBox">Loading...</div>
+  </section>
+
+  <section>
+    <h2>Live Event Detection</h2>
+    <div class="box" id="eventBox">Loading...</div>
+  </section>
+
+  <script>
+    const API = "https://revup-backend.onrender.com/dashboard";
+
+    fetch(API)
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("forecastBox").innerText = JSON.stringify(data.forecast, null, 2);
+        document.getElementById("pricingBox").innerText = JSON.stringify(data.pricing, null, 2);
+        document.getElementById("eventBox").innerText = JSON.stringify(data.events, null, 2);
+      })
+      .catch(err => {
+        document.getElementById("forecastBox").innerText = "Error loading data.";
+        document.getElementById("pricingBox").innerText = "Error loading data.";
+        document.getElementById("eventBox").innerText = "Error loading data.";
+      });
+  </script>
+</body>
+</html>
