@@ -1,47 +1,58 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>RevUp - AI Revenue Management</title>
+  <title>RevUp - Dashboard</title>
   <style>
-    body { font-family: sans-serif; background: #111; color: #fff; padding: 2em; }
-    h1 { color: gold; }
-    section { margin-bottom: 2em; }
-    .box { background: #222; padding: 1em; border-radius: 5px; }
+    body {
+      background: #111;
+      color: #fff;
+      font-family: Arial;
+      padding: 20px;
+    }
+    h1, h2 {
+      color: #fdd835;
+    }
+    .section {
+      background: #222;
+      margin-bottom: 20px;
+      padding: 15px;
+      border-radius: 10px;
+    }
   </style>
 </head>
 <body>
-  <h1>RevUp <span style="font-size: 0.6em;">AI Hotel Revenue Management Dashboard</span></h1>
+  <h1>RevUp AI Hotel Dashboard</h1>
 
-  <section>
-    <h2>Forecast Overview</h2>
-    <div class="box" id="forecastBox">Loading...</div>
-  </section>
+  <div class="section">
+    <h2>Forecast</h2>
+    <pre id="forecast"></pre>
+  </div>
 
-  <section>
-    <h2>Pricing Recommendations</h2>
-    <div class="box" id="pricingBox">Loading...</div>
-  </section>
+  <div class="section">
+    <h2>Prices</h2>
+    <pre id="prices"></pre>
+  </div>
 
-  <section>
-    <h2>Live Event Detection</h2>
-    <div class="box" id="eventBox">Loading...</div>
-  </section>
+  <div class="section">
+    <h2>Events</h2>
+    <pre id="events"></pre>
+  </div>
+
+  <div class="section">
+    <h2>Bookings</h2>
+    <pre id="bookings"></pre>
+  </div>
 
   <script>
-    const API = "https://revup-backend.onrender.com/dashboard";
-
-    fetch(API)
+    fetch("https://revup-backend.onrender.com/dashboard")
       .then(res => res.json())
       .then(data => {
-        document.getElementById("forecastBox").innerText = JSON.stringify(data.forecast, null, 2);
-        document.getElementById("pricingBox").innerText = JSON.stringify(data.pricing, null, 2);
-        document.getElementById("eventBox").innerText = JSON.stringify(data.events, null, 2);
+        document.getElementById("forecast").textContent = JSON.stringify(data.forecast, null, 2);
+        document.getElementById("prices").textContent = JSON.stringify(data.pricing, null, 2);
+        document.getElementById("events").textContent = JSON.stringify(data.events, null, 2);
+        document.getElementById("bookings").textContent = JSON.stringify(data.bookings, null, 2);
       })
-      .catch(err => {
-        document.getElementById("forecastBox").innerText = "Error loading data.";
-        document.getElementById("pricingBox").innerText = "Error loading data.";
-        document.getElementById("eventBox").innerText = "Error loading data.";
-      });
+      .catch(err => console.error("API fetch error:", err));
   </script>
 </body>
 </html>
