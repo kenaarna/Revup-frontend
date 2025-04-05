@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RevUp Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #0e0e0e; color: #fff; font-family: 'Segoe UI', sans-serif; }
+    .header { background-color: #1a1a1a; }
+    .highlight { color: #FFD700; }
+  </style>
+</head>
+<body>
+  <header class="header py-6 px-8 flex justify-between items-center">
+    <h1 class="text-2xl font-bold highlight">RevUp</h1>
+    <p class="text-sm text-gray-400">AI Hotel Revenue Management Dashboard</p>
+  </header>
+
+  <main class="p-8">
+    <section class="mb-10">
+      <h2 class="text-xl font-semibold mb-4">Forecast Overview</h2>
+      <div id="forecast" class="bg-gray-800 p-6 rounded-lg shadow text-sm"></div>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-semibold mb-4">Pricing Recommendations</h2>
+      <div id="pricing" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-semibold mb-4">Live Event Detection</h2>
+      <div class="bg-gray-800 p-6 rounded-lg">
+        <ul id="events" class="list-disc pl-6"></ul>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    fetch("https://revup-backend.onrender.com/dashboard")
+      .then(res => res.json())
+      .then(data => {
+        const forecastDiv = document.getElementById("forecast");
+        forecastDiv.innerHTML = data.forecast.map(f =>
+          `<p><strong>${f.date}</strong>: ${f.occupancy}% occupancy</p>`
+        ).join("");
+
+        const pricingDiv = document.getElementById("pricing");
+        pricingDiv.innerHTML = Object.entries(data.pricing).map(([type, info]) => `
+          <div class="bg-gray-800 p-4 rounded-lg">
+            <h3 class="text-lg font-bold highlight">${type}</h3>
+            <p>Current: $${info.current}</p>
+            <p>Suggested: <span class="highlight">$${info.suggested}</span></p>
+          </div>
+        `).join("");
+
+        const eventsList = document.getElementById("events");
+        eventsList.innerHTML = data.events.map(e =>
+          `<li>${e.name} – ${e.start_date} to ${e.end_date} – +${e.impact * 100}% demand</li>`
+        ).join("");
+      });
+  </script>
+</body>
+</html>
